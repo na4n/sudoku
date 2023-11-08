@@ -75,14 +75,42 @@ public class Board{
 	public boolean validBoard(){
 		HashMap<Integer, Boolean> clean;		
 		int[] columnPair;
+		int[] rowPair;
+		int[] squarePair;
 		int val;
 
 		for(int i = 0; i < 81; ++i){
 			columnPair = columnMapping(i);
+			rowPair = rowMapping(i);
+			squarePair = squareMapping(i);
+
 			clean = new HashMap<Integer, Boolean>(this.foundValues);
-		
 			for(int j = 0; j < 9; ++j){
 				val = this.columnBoard[columnPair[0]][j].getValue();
+				if(val != -1){	
+					if(clean.get(val) == true){		
+						return false;
+					}
+					
+					clean.put(val, true);
+				}
+			}
+
+			clean = new HashMap<Integer, Boolean>(this.foundValues);
+			for(int j = 0; j < 9; ++j){
+				val = this.rowBoard[rowPair[0]][j].getValue();
+				if(val != -1){	
+					if(clean.get(val) == true){		
+						return false;
+					}
+					
+					clean.put(val, true);
+				}
+			}
+
+			clean = new HashMap<Integer, Boolean>(this.foundValues);
+			for(int j = 0; j < 9; ++j){
+				val = this.squareBoard[squarePair[0]][j].getValue();
 				if(val != -1){	
 					if(clean.get(val) == true){		
 						return false;
