@@ -5,7 +5,7 @@ public class Board{
 	private BoardEntry[] rawBoard;
 	private BoardEntry[][] columnBoard;
 	private BoardEntry[][] rowBoard;
-	private BoardEntry[][] squareBoard;
+	public BoardEntry[][] squareBoard;
 
 	Board(int[] inputBoard){
 		this.rawBoard = new BoardEntry[81];
@@ -19,6 +19,7 @@ public class Board{
 
 		makeColumnBoard();
 		makeRowBoard();
+		makeSquareBoard();
 	}
 
 	private void makeColumnBoard(){
@@ -35,6 +36,16 @@ public class Board{
 				this.rowBoard[i][j] = this.rawBoard[i*9+j];
 			}
 		}
+	}
+
+	private void makeSquareBoard(){		
+		for(int i = 0; i < 9; i++){
+			for(int j = 0; j < 9; j++){
+				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// most insane line of code I've written
+			}
+		}
+
+
 	}
 
 	@Override
@@ -73,5 +84,6 @@ public class Board{
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
+
 	}
 }
