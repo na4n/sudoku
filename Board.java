@@ -124,6 +124,10 @@ public class Board{
 		return true;
 	}
 
+	// public void findValidValues(){
+
+	// }
+
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
