@@ -9,7 +9,6 @@ public class Board{
 	public BoardEntry[][] squareBoard;
 	HashMap<Integer, Boolean> foundValues = new HashMap<Integer, Boolean>();
 
-
 	Board(int[] inputBoard){
 		this.rawBoard = new BoardEntry[81];
 		this.columnBoard = new BoardEntry[9][9];
@@ -123,10 +122,6 @@ public class Board{
 
 		return true;
 	}
-
-	// public void findValidValues(){
-
-	// }
 
 	@Override
 	public String toString() {
