@@ -31,7 +31,10 @@ public class Board{
 	}
 
 	private static int[] squareMapping(int rawIndex){
-		return new int[] {rawIndex, rawIndex % 3};
+		int column = rowMapping(rawIndex)[1];
+		int row = columnMapping(rawIndex)[1];
+
+		return new int[] {(row/3)*3+(column/3), column%3+((row%3)*3)};	// comes from makeSquareBoard;
 	}
 
 	private void makeColumnBoard(){
@@ -100,13 +103,12 @@ public class Board{
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
-
+		
 	}
 }
 
 
-/*
- * 	00 01 02  03 04 05  06 07 08
+/* 	00 01 02  03 04 05  06 07 08
  * 	09 10 11  12 13 14  15 16 17
  * 	18 19 20  21 22 23  24 25 26
  *  
@@ -116,5 +118,4 @@ public class Board{
  * 
  * 	54 55 56  57 58 59  60 61 62
  * 	63 64 65  66 67 68  69 70 71
- * 	72 73 74  75 76 77  78 79 80
- */
+ * 	72 73 74  75 76 77  78 79 80 */
