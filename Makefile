@@ -1,7 +1,7 @@
 project : Board.java BoardEntry.java
 	javac Board.java
 
-run: Board.class
+run: project
 	java Board
 
 clean:

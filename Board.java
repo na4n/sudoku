@@ -1,11 +1,14 @@
 import java.lang.StringBuilder;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Board{
 	private BoardEntry[] rawBoard;
 	private BoardEntry[][] columnBoard;
 	private BoardEntry[][] rowBoard;
 	public BoardEntry[][] squareBoard;
+	HashMap<Integer, Boolean> foundValues = new HashMap<Integer, Boolean>();
+
 
 	Board(int[] inputBoard){
 		this.rawBoard = new BoardEntry[81];
@@ -16,6 +19,11 @@ public class Board{
 		for(int i = 0; i < inputBoard.length; i++){
 			this.rawBoard[i] = new BoardEntry(inputBoard[i]);
 		}
+
+		for(int i = 0; i < 10; i++){
+			this.foundValues.put(i, false);
+		} 
+		this.foundValues.put(-1, false);
 
 		makeColumnBoard();
 		makeRowBoard();
@@ -64,6 +72,30 @@ public class Board{
 		return;
 	}
 
+	public boolean validBoard(){
+		HashMap<Integer, Boolean> clean;		
+		int[] columnPair;
+		int val;
+
+		for(int i = 0; i < 81; ++i){
+			columnPair = columnMapping(i);
+			clean = new HashMap<Integer, Boolean>(this.foundValues);
+		
+			for(int j = 0; j < 9; ++j){
+				val = this.columnBoard[columnPair[0]][j].getValue();
+				if(val != -1){	
+					if(clean.get(val) == true){		
+						return false;
+					}
+					
+					clean.put(val, true);
+				}
+			}
+		}
+
+		return true;
+	}
+
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -100,6 +132,13 @@ public class Board{
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
+		boolean test = myBoard.validBoard();
+		if(test){
+			System.out.println("the board is valid");
+		}
+		else{
+			System.out.println("the board is not valid anymore");
+		}
 
 	}
 }
