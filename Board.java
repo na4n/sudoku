@@ -43,7 +43,6 @@ public class Board{
 				this.columnBoard[i][j] = this.rawBoard[i+j*9];
 			}	
 		}
-
 		return;
 	}
 
@@ -53,7 +52,6 @@ public class Board{
 				this.rowBoard[i][j] = this.rawBoard[i*9+j];
 			}
 		}
-
 		return;
 	}
 
@@ -63,7 +61,6 @@ public class Board{
 				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// most insane line of code
 			}
 		}
-
 		return;
 	}
 
@@ -103,7 +100,7 @@ public class Board{
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
-		
+
 	}
 }
 
