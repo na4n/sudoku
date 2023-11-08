@@ -22,12 +22,26 @@ public class Board{
 		makeSquareBoard();
 	}
 
+	private static int[] columnMapping(int rawIndex){
+		return new int[] {rawIndex % 9, rawIndex / 9};
+	}
+
+	private static int[] rowMapping(int rawIndex){
+		return new int[] {rawIndex / 9, rawIndex % 9};
+	}
+
+	private static int[] squareMapping(int rawIndex){
+		return new int[] {rawIndex, rawIndex % 3};
+	}
+
 	private void makeColumnBoard(){
 		for(int i = 0; i < 9; i++){
 			for(int j = 0; j < 9; j++){
 				this.columnBoard[i][j] = this.rawBoard[i+j*9];
 			}	
 		}
+
+		return;
 	}
 
 	private void makeRowBoard(){
@@ -36,16 +50,18 @@ public class Board{
 				this.rowBoard[i][j] = this.rawBoard[i*9+j];
 			}
 		}
+
+		return;
 	}
 
-	private void makeSquareBoard(){		
+	private void makeSquareBoard(){	
 		for(int i = 0; i < 9; i++){
 			for(int j = 0; j < 9; j++){
-				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// most insane line of code I've written
+				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// most insane line of code
 			}
 		}
 
-
+		return;
 	}
 
 	@Override
@@ -87,3 +103,18 @@ public class Board{
 
 	}
 }
+
+
+/*
+ * 	00 01 02  03 04 05  06 07 08
+ * 	09 10 11  12 13 14  15 16 17
+ * 	18 19 20  21 22 23  24 25 26
+ *  
+ * 	27 28 29  30 31 32  33 34 35
+ * 	36 37 38  39 40 41  42 43 44
+ * 	45 46 47  48 49 50  51 52 53
+ * 
+ * 	54 55 56  57 58 59  60 61 62
+ * 	63 64 65  66 67 68  69 70 71
+ * 	72 73 74  75 76 77  78 79 80
+ */
