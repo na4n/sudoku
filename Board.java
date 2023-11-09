@@ -200,13 +200,6 @@ public class Board{
 				this.rawBoard[i].setValue(one);
 				change = true;
 			}
-
-			if(i == 18){
-				System.out.printf("There was one_found: %b and the one was %d\n", one_found, one);
-				for(int k = 0; k < possible.length; k++){
-					System.out.printf("%d is a possible value: %b\n", k, possible[k]);
-				}
-			}
 		}
 
 		return change;
