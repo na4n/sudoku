@@ -123,6 +123,50 @@ public class Board{
 		return true;
 	}
 
+	public void findPotentialValues(){
+		HashMap<Integer, Boolean> clean;		
+		int[] columnPair;
+		int[] rowPair;
+		int[] squarePair;
+		int val;
+
+		for(int i = 0; i < 81; ++i){
+			columnPair = columnMapping(i);
+			rowPair = rowMapping(i);
+			squarePair = squareMapping(i);
+
+			clean = new HashMap<Integer, Boolean>(this.foundValues);
+			for(int j = 0; j < 9; ++j){
+				val = this.columnBoard[columnPair[0]][j].getValue();
+				if(val != -1){						
+					clean.put(val, true);
+				}
+			}
+
+			for(int j = 0; j < 9; ++j){
+				val = this.rowBoard[rowPair[0]][j].getValue();
+				if(val != -1){	
+					clean.put(val, true);
+				}
+			}
+
+			for(int j = 0; j < 9; ++j){
+				val = this.squareBoard[squarePair[0]][j].getValue();
+				if(val != -1){
+					clean.put(val, true);
+				}
+			}
+
+			for(int k = 0; k < 10; k++){
+				if(clean.get(k) == false){
+					this.rawBoard[i].setPotentialValue(k);
+				}
+			}
+		}
+
+		return;
+	}
+
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -159,12 +203,15 @@ public class Board{
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
-		boolean test = myBoard.validBoard();
-		if(test){
-			System.out.println("the board is valid");
-		}
-		else{
-			System.out.println("the board is not valid anymore");
+		myBoard.findPotentialValues();
+
+		for(int i = 0; i < 81; i++){
+			boolean [] out = myBoard.rawBoard[i].getPotentialValues();
+			for(int j = 0; j < out.length; j++){
+				System.out.printf("Potential Value %d is %b for %d\n", j, out[j], i);
+			}
+
+			System.out.printf("Just finished %d\n", i);
 		}
 
 	}
