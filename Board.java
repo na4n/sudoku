@@ -171,6 +171,47 @@ public class Board{
 		return;
 	}
 
+	public boolean passThrough(){
+		boolean change = false;
+		
+		boolean[] possible;
+		boolean one_found = false;
+		int one = -1;
+
+		for(int i = 0; i < 81; i++){
+			one_found = false;
+			one = -1;
+			possible = this.rawBoard[i].getPotentialValues();
+
+			for(int j = 0; j < possible.length; j++){
+				if(possible[j] == true){
+					if(one_found == false){
+						one_found = true;
+						one = j;
+					}
+					else if(one_found == true){
+						one_found = false;
+						break;
+					}
+				}
+			}
+
+			if(one_found){
+				this.rawBoard[i].setValue(one);
+				change = true;
+			}
+
+			if(i == 18){
+				System.out.printf("There was one_found: %b and the one was %d\n", one_found, one);
+				for(int k = 0; k < possible.length; k++){
+					System.out.printf("%d is a possible value: %b\n", k, possible[k]);
+				}
+			}
+		}
+
+		return change;
+	}
+
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -201,13 +242,18 @@ public class Board{
     		4, -1, -1, 8, -1, 3, -1, -1, 1,
     		7, -1, -1, -1, 2, -1, -1, -1, 6,
 			-1, 6, -1, -1, -1, -1, 2, 8, -1,
-			-1, -1, -1, 4, 1, 9, -1, -1, 5,
-	    	-1, -1, -1, -1, 8, -1, -1, 7, 9
+			0, -1, -1, 4, 1, 9, -1, -1, 5,
+	    	2, -1, -1, -1, 8, -1, -1, 7, 9
 		};
 
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
 		myBoard.findPotentialValues();
+		myBoard.passThrough();
+		System.out.println();
+		System.out.println(myBoard);
+
+
 	}
 	
 }
