@@ -8,7 +8,7 @@ public class BoardEntry{
 	}
 
 	public BoardEntry(int inputValue){
-		this.isDiscovered = true;
+		this.isDiscovered = inputValue == -1 ? false : true;
 		this.potentialValues = new boolean[10];
 		this.entryValue = inputValue;
 

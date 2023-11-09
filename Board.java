@@ -131,6 +131,10 @@ public class Board{
 		int val;
 
 		for(int i = 0; i < 81; ++i){
+			if(this.rawBoard[i].getIsDiscovered()){
+				continue;
+			}
+
 			columnPair = columnMapping(i);
 			rowPair = rowMapping(i);
 			squarePair = squareMapping(i);
@@ -204,17 +208,8 @@ public class Board{
 		Board myBoard = new Board(testBoard);
 		System.out.println(myBoard);
 		myBoard.findPotentialValues();
-
-		for(int i = 0; i < 81; i++){
-			boolean [] out = myBoard.rawBoard[i].getPotentialValues();
-			for(int j = 0; j < out.length; j++){
-				System.out.printf("Potential Value %d is %b for %d\n", j, out[j], i);
-			}
-
-			System.out.printf("Just finished %d\n", i);
-		}
-
 	}
+	
 }
 
 
