@@ -1,7 +1,7 @@
 public class BoardEntry{
 	private boolean isDiscovered;
-	private boolean[] potentialValues;
-	private int entryValue;		
+	private boolean[] potentialValues;	//[1, 2, 3, 4, 5, 6, 7, 8 ,9] indices are index-1
+	private int entryValue;	
 
 	public BoardEntry(){
 		this(-1);

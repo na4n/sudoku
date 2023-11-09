@@ -123,7 +123,7 @@ public class Board{
 		return true;
 	}
 
-	public void findPotentialValues(){
+	public void findPotentialValues(){	//fix potentialValues
 		HashMap<Integer, Boolean> clean;		
 		int[] columnPair;
 		int[] rowPair;
@@ -143,21 +143,21 @@ public class Board{
 			for(int j = 0; j < 9; ++j){
 				val = this.columnBoard[columnPair[0]][j].getValue();
 				if(val != -1){						
-					clean.put(val, true);
+					clean.put(val-1, true);
 				}
 			}
 
 			for(int j = 0; j < 9; ++j){
 				val = this.rowBoard[rowPair[0]][j].getValue();
 				if(val != -1){	
-					clean.put(val, true);
+					clean.put(val-1, true);
 				}
 			}
 
 			for(int j = 0; j < 9; ++j){
 				val = this.squareBoard[squarePair[0]][j].getValue();
 				if(val != -1){
-					clean.put(val, true);
+					clean.put(val-1, true);
 				}
 			}
 
@@ -171,7 +171,7 @@ public class Board{
 		return;
 	}
 
-	public boolean passThrough(){
+	public boolean passThrough(){	//fix potentialValues
 		boolean change = false;
 		
 		boolean[] possible;
