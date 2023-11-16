@@ -9,10 +9,10 @@ public class BoardEntry{
 
 	public BoardEntry(int inputValue){
 		this.isDiscovered = inputValue == -1 ? false : true;
-		this.potentialValues = new boolean[10];
+		this.potentialValues = new boolean[9];
 		this.entryValue = inputValue;
 
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 9; i++){
 			potentialValues[i] = false;
 		}
 	}
@@ -26,6 +26,10 @@ public class BoardEntry{
 
 	public void setPotentialValue(int i){
 		this.potentialValues[i] = true;
+	}
+
+	public void setNonPotentialValue(int i){
+		this.potentialValues[i] = false;
 	}
 
 	public boolean[] getPotentialValues(){

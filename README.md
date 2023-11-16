@@ -6,7 +6,6 @@
 - solve
 
 ## to-do
-1. look through valid values
+- solve number pass through
+- add recursive traversal for true unknowns
 
-2. multithreading for solving
-    - initial pass through to find potential values

@@ -134,7 +134,7 @@ public class Board{
 			if(this.rawBoard[i].getIsDiscovered()){
 				continue;
 			}
-
+			
 			columnPair = columnMapping(i);
 			rowPair = rowMapping(i);
 			squarePair = squareMapping(i);
@@ -149,7 +149,8 @@ public class Board{
 
 			for(int j = 0; j < 9; ++j){
 				val = this.rowBoard[rowPair[0]][j].getValue();
-				if(val != -1){	
+				
+				if(val != -1){
 					clean.put(val-1, true);
 				}
 			}
@@ -165,13 +166,16 @@ public class Board{
 				if(clean.get(k) == false){
 					this.rawBoard[i].setPotentialValue(k);
 				}
+				else{
+					this.rawBoard[i].setNonPotentialValue(k);
+				}
 			}
 		}
 
 		return;
 	}
 
-	private boolean passThrough(){	//fix potentialValues
+	public boolean passThrough(){	//fix potentialValues
 		boolean change = false;
 		
 		boolean[] possible;
@@ -182,9 +186,11 @@ public class Board{
 			if(this.rawBoard[i].getIsDiscovered() == true){
 				continue;
 			}
+
 			one_found = false;
 			one = -1;
 			possible = this.rawBoard[i].getPotentialValues();
+
 
 			for(int j = 0; j < possible.length; j++){
 				if(possible[j] == true){
@@ -200,7 +206,6 @@ public class Board{
 			}
 
 			if(one_found){
-				System.out.printf("yay one was found at %d\n", i);
 				this.rawBoard[i].setValue(one);
 				this.rawBoard[i].setIsDiscovered(true);
 				change = true;
@@ -272,24 +277,23 @@ public class Board{
 
 	public static void main(String[] args){
 		int[] testBoard = {
-    		1, -1, -1, -1, -1, -1, 6, -1, 4,
-			-1, 3, 4, -1, -1, -1, -1, 1, 7,
-			5, 9, -1, -1, 7, -1, -1, -1, 8,
-			9, 2, 1, 4, 3, -1, 8, 7, 6,
-			-1, -1, -1, -1, -1, 1, 3, 9, -1,
-			-1, 4, 8, 7, 6, 9, 5, 2, -1,
-			-1, -1, 5, -1, -1, -1, -1, -1, 9
-			-1, -1, -1, -1, 5, 4, -1, -1, 8, -1,
-			4, 1, -1, 6, -1, 8, -1, -1, -1
+    		-1,-1,9,-1,-1,2,-1,-1,5,
+			5,3,8,-1,6,4,-1,-1,9,
+			1,6,2,-1,-1,-1,-1,3,-1,
+			-1,-1,3,-1,2,7,-1,-1,-1,
+			-1,5,4,6,-1,-1,1,-1,-1,
+			-1,-1,7,-1,1,5,3,4,-1,
+			3,-1,-1,8,-1,1,9,-1,6,
+			7,-1,-1,3,-1,-1,8,5,-1,
+			-1,9,1,-1,-1,-1,4,7,-1
 		};
 
 		Board myBoard = new Board(testBoard);
 		
 		System.out.println(myBoard);
 		myBoard.solveIterable();
-		System.out.println();
+		System.out.println();		
 		System.out.println(myBoard);
-
 
 	}
 	
