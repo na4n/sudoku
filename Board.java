@@ -65,7 +65,7 @@ public class Board{
 	private void makeSquareBoard(){	
 		for(int i = 0; i < 9; i++){
 			for(int j = 0; j < 9; j++){
-				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// most insane line of code
+				this.squareBoard[(i/3)*3+(j/3)][j%3+((i%3)*3)] = this.rawBoard[i*9+j];	// it works don't ask
 			}
 		}
 		return;
@@ -161,7 +161,7 @@ public class Board{
 				}
 			}
 
-			for(int k = 0; k < 10; k++){
+			for(int k = 0; k < 9; k++){
 				if(clean.get(k) == false){
 					this.rawBoard[i].setPotentialValue(k);
 				}
@@ -171,7 +171,7 @@ public class Board{
 		return;
 	}
 
-	public boolean passThrough(){	//fix potentialValues
+	private boolean passThrough(){	//fix potentialValues
 		boolean change = false;
 		
 		boolean[] possible;
@@ -179,6 +179,9 @@ public class Board{
 		int one = -1;
 
 		for(int i = 0; i < 81; i++){
+			if(this.rawBoard[i].getIsDiscovered() == true){
+				continue;
+			}
 			one_found = false;
 			one = -1;
 			possible = this.rawBoard[i].getPotentialValues();
@@ -187,7 +190,7 @@ public class Board{
 				if(possible[j] == true){
 					if(one_found == false){
 						one_found = true;
-						one = j;
+						one = j+1;
 					}
 					else if(one_found == true){
 						one_found = false;
@@ -197,12 +200,53 @@ public class Board{
 			}
 
 			if(one_found){
+				System.out.printf("yay one was found at %d\n", i);
 				this.rawBoard[i].setValue(one);
+				this.rawBoard[i].setIsDiscovered(true);
 				change = true;
 			}
 		}
 
 		return change;
+	}
+
+	// private int numMap(int v, int a){
+		
+	// }
+
+	// public void numberPass(int i){
+	// 	boolean[] locations = new boolean[9];
+
+	// 	for(int i = 0; i < 9; i++){	// initial pass through to find if 1 exists
+	// 		for(int j = 0; j < 9; j++){
+	// 			if(this.squareBoard[i][j].getValue() == i){
+	// 				locations[i] = true;
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	0	1	2
+	// 	3	4	5 	(+/- 1/2)
+	// 	6	7	8
+		
+	// 	(+/- 3/6)
+
+	// 	for(int i = 0; i < 9; i++){
+
+	// 	}
+
+	// 	return
+	// }
+
+	public void solveIterable(){
+		findPotentialValues();
+
+		while(passThrough() == true){
+			findPotentialValues();
+		}
+
+		return;
 	}
 
 	@Override
@@ -220,7 +264,7 @@ public class Board{
 			
 			if(i < 72){
 				sb.append("\n");
-			}		
+			}
 		}
 
         return sb.toString();
@@ -228,21 +272,21 @@ public class Board{
 
 	public static void main(String[] args){
 		int[] testBoard = {
-    		5, 3, -1, -1, 7, -1, -1, -1, -1,
-    		6, -1, -1, 1, 9, 5, -1, -1, -1,
-    		-1, 9, 8, -1, -1, -1, -1, 6, -1,
-    		8, -1, -1, -1, 6, -1, -1, -1, 3,
-    		4, -1, -1, 8, -1, 3, -1, -1, 1,
-    		7, -1, -1, -1, 2, -1, -1, -1, 6,
-			-1, 6, -1, -1, -1, -1, 2, 8, -1,
-			0, -1, -1, 4, 1, 9, -1, -1, 5,
-	    	2, -1, -1, -1, 8, -1, -1, 7, 9
+    		1, -1, -1, -1, -1, -1, 6, -1, 4,
+			-1, 3, 4, -1, -1, -1, -1, 1, 7,
+			5, 9, -1, -1, 7, -1, -1, -1, 8,
+			9, 2, 1, 4, 3, -1, 8, 7, 6,
+			-1, -1, -1, -1, -1, 1, 3, 9, -1,
+			-1, 4, 8, 7, 6, 9, 5, 2, -1,
+			-1, -1, 5, -1, -1, -1, -1, -1, 9
+			-1, -1, -1, -1, 5, 4, -1, -1, 8, -1,
+			4, 1, -1, 6, -1, 8, -1, -1, -1
 		};
 
 		Board myBoard = new Board(testBoard);
+		
 		System.out.println(myBoard);
-		myBoard.findPotentialValues();
-		myBoard.passThrough();
+		myBoard.solveIterable();
 		System.out.println();
 		System.out.println(myBoard);
 

@@ -36,4 +36,6 @@ public class BoardEntry{
 
 	public int getValue(){ return this.entryValue; }
 
+	public void setIsDiscovered(boolean val){ this.isDiscovered = val; }
+
 }
