@@ -176,6 +176,10 @@ public class Board{
 	}
 
 	public boolean passThrough(){	//fix potentialValues
+		return potentialPass();
+	}
+
+	private boolean potentialPass(){
 		boolean change = false;
 		
 		boolean[] possible;
@@ -214,6 +218,10 @@ public class Board{
 
 		return change;
 	}
+
+	// private boolean numberPass(int i){	//looks through i
+
+	// }
 
 	// private int numMap(int v, int a){
 		
