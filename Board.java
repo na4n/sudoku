@@ -219,39 +219,30 @@ public class Board{
 		return change;
 	}
 
-	// private boolean numberPass(int i){	//looks through i
-
-	// }
-
-	// private int numMap(int v, int a){
+	private int[] numMap(int n){
+		switch (n){
+			case 1: n = 0;
+				return new int[] {3, 6, 1, 2};
+			case 2: n = 1;
+				return new int[] {4, 7, 0, 2};
+			case 3: n = 2;
+				return new int[] {5, 8, 0, 1};
+			case 4: n = 3;
+				return new int[] {0, 6, 4, 5};
+			case 5: n = 4;
+				return new int[] {1, 7, 3, 5};
+			case 6: n = 5;
+				return new int[] {2, 8, 3, 4};
+			case 7: n = 6;
+				return new int[] {0, 3, 7, 8};
+			case 8: n = 7;
+				return new int[] {1, 4, 6, 8};
+			case 9: n = 8;
+				return new int[] {2, 5, 6, 7};
+		}
 		
-	// }
-
-	// public void numberPass(int i){
-	// 	boolean[] locations = new boolean[9];
-
-	// 	for(int i = 0; i < 9; i++){	// initial pass through to find if 1 exists
-	// 		for(int j = 0; j < 9; j++){
-	// 			if(this.squareBoard[i][j].getValue() == i){
-	// 				locations[i] = true;
-	// 				break;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	0	1	2
-	// 	3	4	5 	(+/- 1/2)
-	// 	6	7	8
-		
-	// 	(+/- 3/6)
-
-	// 	for(int i = 0; i < 9; i++){
-
-	// 	}
-
-	// 	return
-	// }
-
+		return new int[] {-1};
+	}
 	public void solveIterable(){
 		findPotentialValues();
 
@@ -299,12 +290,16 @@ public class Board{
 		Board myBoard = new Board(testBoard);
 		
 		System.out.println(myBoard);
-		myBoard.solveIterable();
-		System.out.println();		
-		System.out.println(myBoard);
+		// myBoard.solveIterable();
+		// System.out.println();		
+		// System.out.println(myBoard);
 
-	}
-	
+		// boolean[] holland = myBoard.numberPass(1);
+		// for(int i = 0; i < holland.length; i++){
+		// 	System.out.printf("Square %d has 1: %b\n", i, holland[i]);
+		// }
+
+	}	
 }
 
 
