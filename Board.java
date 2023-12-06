@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Board{
-	private BoardEntry[] rawBoard;
+	public BoardEntry[] rawBoard;
 	private BoardEntry[][] columnBoard;
 	private BoardEntry[][] rowBoard;
 	public BoardEntry[][] squareBoard;
@@ -149,7 +149,6 @@ public class Board{
 
 			for(int j = 0; j < 9; ++j){
 				val = this.rowBoard[rowPair[0]][j].getValue();
-				
 				if(val != -1){
 					clean.put(val-1, true);
 				}
@@ -219,6 +218,20 @@ public class Board{
 		return change;
 	}
 
+	private void numCheck(){
+		for(int i = 0; i < this.squareBoard.length; i++){
+			for(int j = 0; j < this.squareBoard[0].length; j++){
+				if(this.squareBoard[i][j].getIsDiscovered() == false){
+					for(int k = 0; k < 9; k++){
+						System.out.printf("i,j: %d,%d\t%d: %b\n", i,j, k, this.squareBoard[i][j].getPotentialValues()[k]);
+					}
+				}
+			}
+		}
+
+		return;
+	}
+
 	private int[] numMap(int n){
 		switch (n){
 			case 1: n = 0;
@@ -244,11 +257,13 @@ public class Board{
 		return new int[] {-1};
 	}
 	public void solveIterable(){
-		findPotentialValues();
-
-		while(passThrough() == true){
+		boolean b;
+		do{
 			findPotentialValues();
-		}
+			b = passThrough();
+		} while(b == true);
+
+		//numCheck();
 
 		return;
 	}
@@ -288,11 +303,16 @@ public class Board{
 		};
 
 		Board myBoard = new Board(testBoard);
-		
 		System.out.println(myBoard);
-		// myBoard.solveIterable();
+		myBoard.findPotentialValues();
+
+		//System.out.println(myBoard);
+		myBoard.solveIterable();
+		for(int i = 0; i < 9; i++){
+			System.out.printf("%d: %b\n", i, myBoard.rawBoard[78].getPotentialValues()[i]);
+		}
 		// System.out.println();		
-		// System.out.println(myBoard);
+	//	System.out.println(myBoard);
 
 		// boolean[] holland = myBoard.numberPass(1);
 		// for(int i = 0; i < holland.length; i++){

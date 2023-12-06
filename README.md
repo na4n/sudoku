@@ -5,7 +5,3 @@
 # Sudoku
 - solve
 
-## to-do
-- solve number pass through
-- add recursive traversal for true unknowns
-
