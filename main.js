@@ -14,7 +14,7 @@ function validateBoard(){
 		const map = new Map();
 		for(let j = 0; j < 9; j++){
 			const value = Number(document.getElementById(`${j}${i}`).value);
-			if(value === NaN || value < 1 || value > 9 || map.get(value) !== undefined){
+			if(map.get(value) !== undefined){
 				return false;
 			}
 			map.set(value, 1);
