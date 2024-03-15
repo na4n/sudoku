@@ -36,7 +36,7 @@ function validateBoard(){
 				}
 			}
 		}
-	}	
-
+	}
+	
 	return true;
 }
