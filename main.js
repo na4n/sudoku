@@ -5,12 +5,11 @@ function validateBoard() {
 		for (let j = 0; j < 9; j++) {
 			const valueRow = Number(document.getElementById(`${i}${j}`).value);
 			const valueColumn = Number(document.getElementById(`${j}${i}`).value);
-	
-			if (isNaN(valueRow) || isNaN(valueColumn) || valueRow < 1 || valueRow > 9 || valueColumn < 1 || valueColumn > 9) {
-				return false;
-			}
-	
-			if ((mapRow.has(valueRow)) || (mapColumn.has(valueColumn))) {
+
+			const rowInvalid = isNaN(valueRow) || valueRow < 1 || valueRow > 9 || mapRow.has(valueRow);
+			const colInvalid = isnan(valueColumn) || valueColumn < 1 || valueColumn > 9 || mapColumn.has(valueColumn);
+
+			if (rowInvalid || colInvalid) {
 				return false;
 			}
 	
