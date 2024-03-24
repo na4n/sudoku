@@ -35,3 +35,23 @@ function validateBoard() {
 
     return true;
 }
+
+const valueMap = new Map();
+// for(let i = 0; i < 9; i++){
+//     for(let j = 0; j < 9; j++){
+//         valueMap.set(`${i}${j}`, []);
+//     }
+// }
+
+function findPotentialValues(){
+    for(let i = 0; i < 9; i++){
+        let a = []
+        const found = new Map();
+
+        for(let j = 0; j < 9; j++){
+            //if(document.getElementById('${}${}'))
+        }
+    }
+
+
+}

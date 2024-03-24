@@ -1,3 +1,28 @@
-input[type='number']{
-    width: 2em;
-} 
+/* Light mode */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+        color: black;
+    }
+  
+    input{
+        background-color: white;
+        color: black;
+    }
+    
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    input{
+        background-color: black;
+        color: white;
+    }
+    
+}
+
