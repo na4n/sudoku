@@ -7,7 +7,7 @@ function validateBoard() {
 			const valueColumn = Number(document.getElementById(`${j}${i}`).value);
 
 			const rowInvalid = isNaN(valueRow) || valueRow < 1 || valueRow > 9 || mapRow.has(valueRow);
-			const colInvalid = isnan(valueColumn) || valueColumn < 1 || valueColumn > 9 || mapColumn.has(valueColumn);
+			const colInvalid = isNaN(valueColumn) || valueColumn < 1 || valueColumn > 9 || mapColumn.has(valueColumn);
 
 			if (rowInvalid || colInvalid) {
 				return false;
@@ -49,8 +49,15 @@ function findPotentialValues(){
         const found = new Map();
 
         for(let j = 0; j < 9; j++){
-            //if(document.getElementById('${}${}'))
+            if(document.getElementById(`${i}${j}`).value === ''){
+                a.push('${i}{j}');
+            }
+            else{
+                found.set(Number(document.getElementById(`${i}${j}`).value), 1);
+            }
         }
+
+        console.log(found);
     }
 
 
