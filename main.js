@@ -1,18 +1,9 @@
-function customNumber(n){
-    const a = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    if(a.includes(n)){
-        return Number(n);
-    }
-    else{
-        return -1;
-    }
-}
-
 function validateBoard() {
-    const gridmap = new Map();
-    for(let i = 0; i < 9; i++){
-        gridmap.set(i, new Map());
-    }
+    function customNumber(n){
+        return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
+    }    
+
+    const gridmap = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
 
     for (let i = 0; i < 9; i++) {
         const mapRow = new Map();
@@ -28,11 +19,6 @@ function validateBoard() {
             const colInvalid = (valueColumn === -1 && rawColVal !== '') || (valueColumn < 1 && rawColVal !== '')|| (valueColumn > 9 && rawColVal !== '') || mapColumn.has(valueColumn);
 
             if (rowInvalid || colInvalid) {
-                console.log(rowInvalid);
-                console.log(`${i}${j}`);
-                console.log(colInvalid);
-                console.log(`${j}${i}`);
-                console.log('invalid row or column');
                 return false;
             }
             
@@ -42,29 +28,15 @@ function validateBoard() {
             if(valueColumn !== -1){
                 mapColumn.set(valueColumn, 1);
             }
-
-            if(gridmap.get((i%3)*3+(j%3)).has(valueRow)){
-                console.log('invalid grid');
-                return false;
+            
+            if(valueRow !== -1){
+                if(gridmap.get(((Math.floor(i/3))*3)+(Math.floor(j/3))).has(valueRow)){
+                    return false;
+                }
+                gridmap.get(((Math.floor(i/3))*3)+(Math.floor(j/3))).set(valueRow, 1);    
             }
-            gridmap.get((i%3)*3+(j%3)).set(valueRow, 1);
         }
     }
-
-    // for (let i = 0; i < 9; i += 3) {
-    //     for (let j = 0; j < 9; j += 3) {
-    //         const subgridMap = new Map();
-    //         for (let x = 0; x < 3; x++) {
-    //             for (let y = 0; y < 3; y++) {
-    //                 const valueSubgrid = Number(document.getElementById(`${i + x}${j + y}`).value);
-    //                 if (subgridMap.has(valueSubgrid)) {
-    //                     return false;
-    //                 }
-    //                 subgridMap.set(valueSubgrid, 1);
-    //             }
-    //         }
-    //     }
-    // }
 
     return true;
 }
