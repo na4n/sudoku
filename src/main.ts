@@ -1,24 +1,28 @@
-function validateBoard() {
-    function customNumber(n){
+function validateBoard(): boolean {
+    function customNumber(n: string): number{
         return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
     }    
 
-    const gridmap = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
+    const gridmap: Map<number, Map<number, number>> = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
+    function gridIndex(i: number, j: number): number{
+        return ((Math.floor(i/3))*3)+(Math.floor(j/3));
+    }
 
     for (let i = 0; i < 9; i++) {
-        const mapRow = new Map();
-        const mapColumn = new Map();
+        const mapRow: Map<number, number> = new Map();
+        const mapColumn: Map<number, number> = new Map();
         for (let j = 0; j < 9; j++) {
-            const rawRowVal = document.getElementById(`${i}${j}`).value;
-            const valueRow = customNumber(rawRowVal);
+            const rawRowVal: string = (<HTMLInputElement>document.getElementById(`${i}${j}`)).value;
+            const valueRow: number = customNumber(rawRowVal);
             
-            const rawColVal = document.getElementById(`${j}${i}`).value;
-            const valueColumn = customNumber(rawColVal);
+            const rawColVal: string = (<HTMLInputElement>document.getElementById(`${j}${i}`)).value;
+            const valueColumn: number = customNumber(rawColVal);
 
-            const rowInvalid = (valueRow === -1 && rawRowVal !== '') || (valueRow < 1 && rawRowVal !== '')|| (valueRow > 9 && rawRowVal !== '') || mapRow.has(valueRow);
-            const colInvalid = (valueColumn === -1 && rawColVal !== '') || (valueColumn < 1 && rawColVal !== '')|| (valueColumn > 9 && rawColVal !== '') || mapColumn.has(valueColumn);
+            const rowInvalid: boolean = (valueRow === -1 && rawRowVal !== '') || (valueRow < 1 && rawRowVal !== '')|| (valueRow > 9 && rawRowVal !== '') || mapRow.has(valueRow);
+            const colInvalid: boolean = (valueColumn === -1 && rawColVal !== '') || (valueColumn < 1 && rawColVal !== '')|| (valueColumn > 9 && rawColVal !== '') || mapColumn.has(valueColumn);
+            const gridInvalid: boolean = gridmap.get(gridIndex(i, j)).has(valueRow);
 
-            if (rowInvalid || colInvalid) {
+            if(rowInvalid || colInvalid || gridInvalid){
                 return false;
             }
             
@@ -28,12 +32,8 @@ function validateBoard() {
             if(valueColumn !== -1){
                 mapColumn.set(valueColumn, 1);
             }
-            
             if(valueRow !== -1){
-                if(gridmap.get(((Math.floor(i/3))*3)+(Math.floor(j/3))).has(valueRow)){
-                    return false;
-                }
-                gridmap.get(((Math.floor(i/3))*3)+(Math.floor(j/3))).set(valueRow, 1);    
+                gridmap.get(gridIndex(i, j)).set(valueRow, 1);
             }
         }
     }

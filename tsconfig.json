@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "es2016", "dom"],
+    "outDir": "./build/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es2016",
+    "moduleResolution": "node",
+    "jsx": "react"
+  },
+  "include": ["./src/*"]
+}
