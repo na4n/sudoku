@@ -1,44 +1,63 @@
-function validateBoard(): boolean {
-    function customNumber(n: string): number{
-        return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
-    }    
 
-    const gridmap: Map<number, Map<number, number>> = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
-    function gridIndex(i: number, j: number): number{
-        return ((Math.floor(i/3))*3)+(Math.floor(j/3));
-    }
+function customNumber(n: string): number{
+    return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
+}
 
-    for (let i = 0; i < 9; i++) {
-        const mapRow: Map<number, number> = new Map();
-        const mapColumn: Map<number, number> = new Map();
-        for (let j = 0; j < 9; j++) {
-            const rawRowVal: string = (<HTMLInputElement>document.getElementById(`${i}${j}`)).value;
-            const valueRow: number = customNumber(rawRowVal);
-            
-            const rawColVal: string = (<HTMLInputElement>document.getElementById(`${j}${i}`)).value;
-            const valueColumn: number = customNumber(rawColVal);
-
-            const rowInvalid: boolean = (valueRow === -1 && rawRowVal !== '') || (valueRow < 1 && rawRowVal !== '')|| (valueRow > 9 && rawRowVal !== '') || mapRow.has(valueRow);
-            const colInvalid: boolean = (valueColumn === -1 && rawColVal !== '') || (valueColumn < 1 && rawColVal !== '')|| (valueColumn > 9 && rawColVal !== '') || mapColumn.has(valueColumn);
-            const gridInvalid: boolean = gridmap.get(gridIndex(i, j)).has(valueRow);
-
-            if(rowInvalid || colInvalid || gridInvalid){
+let board: number[][] = [];
+function populateBoard(): boolean{
+    board = [];
+    for(let i = 0; i < 9; i++){
+        const row: number[] = []
+        for(let j = 0; j < 9; j++){
+            const boardValue: string = (<HTMLInputElement>document.getElementById(`${i}${j}`)).value;
+            const numVal = customNumber(boardValue);
+            if(boardValue != '' && numVal == -1){
                 return false;
             }
-            
-            if(valueRow !== -1){
-                mapRow.set(valueRow, 1);
+            row.push(numVal);
+        }
+        board.push(row);
+    }
+
+    return true;
+}
+
+function gridIndex(i: number, j: number): number{
+    return ((Math.floor(i/3))*3)+(Math.floor(j/3));
+}
+
+function validateBoard(): boolean {
+    if(board.length != 9){
+        return false;
+    }
+
+    const mapGrid: Map<number,Map<number, number>> = new Map(Array.from({length:9}, (_,i) => [i, new Map()]));
+    for(let i = 0; i < 9; i++){
+        const mapRow: Map<number, number> = new Map();
+        const mapCol: Map<number, number> = new Map();
+        for(let j = 0; j < 9; j++){
+            const rowVal: number = board[i][j];
+            const colVal: number = board[j][i];
+            if(mapRow.has(rowVal) || mapCol.has(colVal) || mapGrid.get(gridIndex(i, j)).has(rowVal)){
+                return false;
             }
-            if(valueColumn !== -1){
-                mapColumn.set(valueColumn, 1);
-            }
-            if(valueRow !== -1){
-                gridmap.get(gridIndex(i, j)).set(valueRow, 1);
+            else{
+                if(rowVal != -1){
+                    mapRow.set(rowVal, 1);
+                    mapGrid.get(gridIndex(i, j)).set(rowVal, 1);
+                }
+                if(colVal != -1){
+                    mapCol.set(colVal, 1);
+                }
             }
         }
     }
 
     return true;
+}
+
+function solve(): boolean{
+    return populateBoard() && validateBoard();
 }
 
 const potentialValue: Map<string, number[]> = new Map();

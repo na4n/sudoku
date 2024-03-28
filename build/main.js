@@ -1,37 +1,55 @@
-function validateBoard() {
-    function customNumber(n) {
-        return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
-    }
-    const gridmap = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
-    function gridIndex(i, j) {
-        return ((Math.floor(i / 3)) * 3) + (Math.floor(j / 3));
-    }
+function customNumber(n) {
+    return ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(n) ? Number(n) : -1;
+}
+let board = [];
+function populateBoard() {
+    board = [];
     for (let i = 0; i < 9; i++) {
-        const mapRow = new Map();
-        const mapColumn = new Map();
+        const row = [];
         for (let j = 0; j < 9; j++) {
-            const rawRowVal = document.getElementById(`${i}${j}`).value;
-            const valueRow = customNumber(rawRowVal);
-            const rawColVal = document.getElementById(`${j}${i}`).value;
-            const valueColumn = customNumber(rawColVal);
-            const rowInvalid = (valueRow === -1 && rawRowVal !== '') || (valueRow < 1 && rawRowVal !== '') || (valueRow > 9 && rawRowVal !== '') || mapRow.has(valueRow);
-            const colInvalid = (valueColumn === -1 && rawColVal !== '') || (valueColumn < 1 && rawColVal !== '') || (valueColumn > 9 && rawColVal !== '') || mapColumn.has(valueColumn);
-            const gridInvalid = gridmap.get(gridIndex(i, j)).has(valueRow);
-            if (rowInvalid || colInvalid || gridInvalid) {
+            const boardValue = document.getElementById(`${i}${j}`).value;
+            const numVal = customNumber(boardValue);
+            if (boardValue != '' && numVal == -1) {
                 return false;
             }
-            if (valueRow !== -1) {
-                mapRow.set(valueRow, 1);
+            row.push(numVal);
+        }
+        board.push(row);
+    }
+    return true;
+}
+function gridIndex(i, j) {
+    return ((Math.floor(i / 3)) * 3) + (Math.floor(j / 3));
+}
+function validateBoard() {
+    if (board.length != 9) {
+        return false;
+    }
+    const mapGrid = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
+    for (let i = 0; i < 9; i++) {
+        const mapRow = new Map();
+        const mapCol = new Map();
+        for (let j = 0; j < 9; j++) {
+            const rowVal = board[i][j];
+            const colVal = board[j][i];
+            if (mapRow.has(rowVal) || mapCol.has(colVal) || mapGrid.get(gridIndex(i, j)).has(rowVal)) {
+                return false;
             }
-            if (valueColumn !== -1) {
-                mapColumn.set(valueColumn, 1);
-            }
-            if (valueRow !== -1) {
-                gridmap.get(gridIndex(i, j)).set(valueRow, 1);
+            else {
+                if (rowVal != -1) {
+                    mapRow.set(rowVal, 1);
+                    mapGrid.get(gridIndex(i, j)).set(rowVal, 1);
+                }
+                if (colVal != -1) {
+                    mapCol.set(colVal, 1);
+                }
             }
         }
     }
     return true;
+}
+function solve() {
+    return populateBoard() && validateBoard();
 }
 const potentialValue = new Map();
 function findPotentialValues() {
