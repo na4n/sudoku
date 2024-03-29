@@ -53,15 +53,9 @@ function solve() {
 }
 const potentialValue = new Map();
 function findPotentialValues() {
-    function mapComplement(foundVals) {
-        const comp = [];
-        for (let i = 0; i < 9; i++) {
-            if (foundVals.get(i) === undefined) {
-                comp.push(i);
-            }
-        }
-        return comp;
-    }
+    const mapComplement = function (foundVals) {
+        return Array.from({ length: 9 }, (_, i) => i).filter(i => !foundVals.has(i));
+    };
     function innerJoinSet(arr1, arr2) {
         const inBoth = [];
         for (let i = 0; i < arr1.length; i++) {
