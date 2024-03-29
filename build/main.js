@@ -51,10 +51,10 @@ function validateBoard() {
 function solve() {
     return populateBoard() && validateBoard();
 }
-const potentialValue = new Map();
+let potentialValue = new Map();
 function findPotentialValues() {
     const mapComplement = function (foundVals) {
-        return Array.from({ length: 9 }, (_, i) => i).filter(i => !foundVals.has(i));
+        return Array.from({ length: 9 }, (_, i) => i).filter(i => (foundVals.get(i) === 1));
     };
     function innerJoinSet(arr1, arr2) {
         const inBoth = [];
@@ -104,59 +104,7 @@ function findPotentialValues() {
             }
         }
     }
-    // for (let i = 0; i < 9; i++) {
-    //     const arr: string[] = [];
-    //     let hashmap: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-    //     for (let j = 0; j < 9; j++) {
-    //         const rowEle: HTMLElement = document.getElementById(`${i}${j}`);
-    //         if ((<HTMLInputElement>(rowEle)).value === '') {
-    //             arr.push(`${i}${j}`);
-    //         }
-    //         else {
-    //             hashmap.set(Number((<HTMLInputElement>(rowEle)).value), 0);
-    //         }
-    //     }
-    //     const values: number[] = [];
-    //     for (let i = 1; i < 10; i++) {
-    //         if (hashmap.get(i) === 1) {
-    //             values.push(i);
-    //         }
-    //     }
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (potentialValue.get(arr[i]) === undefined) {
-    //             potentialValue.set(arr[i], values);
-    //         }
-    //         else {
-    //             potentialValue.set(arr[i], potentialValue.get(arr[i]).concat(values));
-    //         }
-    //     }
-    // }
-    // for (let j = 0; j < 9; j++) {
-    //     const arr: string[] = [];
-    //     let hashmap: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-    //     for (let i = 0; i < 9; i++) {
-    //         const rowEle = document.getElementById(`${i}${j}`);
-    //         if ((<HTMLInputElement>rowEle).value === '') {
-    //             arr.push(`${i}${j}`);
-    //         }
-    //         else {
-    //             hashmap.set(Number((<HTMLInputElement>rowEle).value), 0)
-    //         }
-    //     }
-    //     const values: number[] = [];
-    //     for (let i = 1; i < 10; i++) {
-    //         if (hashmap.get(i) === 1) {
-    //             values.push(i);
-    //         }
-    //     }
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (potentialValue.get(arr[i]) === undefined) {
-    //             potentialValue.set(arr[i], values);
-    //         }
-    //         else {
-    //             potentialValue.set(arr[i], Array.from(new Set(potentialValue.get(arr[i]).concat(values))));
-    //         }
-    //     }
-    // }
+    //also do grids
+    potentialValue = new Map([...potentialValue.entries()].sort());
 }
 //# sourceMappingURL=main.js.map

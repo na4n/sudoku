@@ -60,11 +60,11 @@ function solve(): boolean{
     return populateBoard() && validateBoard();
 }
 
-const potentialValue: Map<string, number[]> = new Map();
+let potentialValue: Map<string, number[]> = new Map();
 function findPotentialValues(): boolean {
     
     const mapComplement = function (foundVals: Map<number, number>): number[]{
-        return Array.from({ length: 9 }, (_, i) => i).filter(i => !foundVals.has(i));
+        return Array.from({ length: 9 }, (_, i) => i).filter(i => (foundVals.get(i) === 1));
     }
 
     function innerJoinSet(arr1: number[], arr2: number[]): number[]{
@@ -103,7 +103,7 @@ function findPotentialValues(): boolean {
                 colPossibilities.set(board[j][i], 0);
             }
         }
-
+        
         for(let i = 0; i < rowUnknowns.length; i++){
             if(potentialValue.get(JSON.stringify(rowUnknowns[i])) === undefined){
                 potentialValue.set(JSON.stringify(rowUnknowns[i]), mapComplement(rowPossibilities));
@@ -121,66 +121,10 @@ function findPotentialValues(): boolean {
                 potentialValue.set(JSON.stringify(colUnknowns[i]), innerJoinSet(potentialValue.get(JSON.stringify(colUnknowns[i])), mapComplement(colPossibilities)));
             }
         }
-
     }
-    
-    // for (let i = 0; i < 9; i++) {
-    //     const arr: string[] = [];
-    //     let hashmap: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-    //     for (let j = 0; j < 9; j++) {
-    //         const rowEle: HTMLElement = document.getElementById(`${i}${j}`);
-    //         if ((<HTMLInputElement>(rowEle)).value === '') {
-    //             arr.push(`${i}${j}`);
-    //         }
-    //         else {
-    //             hashmap.set(Number((<HTMLInputElement>(rowEle)).value), 0);
-    //         }
-    //     }
-    //     const values: number[] = [];
-    //     for (let i = 1; i < 10; i++) {
-    //         if (hashmap.get(i) === 1) {
-    //             values.push(i);
-    //         }
-    //     }
 
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (potentialValue.get(arr[i]) === undefined) {
-    //             potentialValue.set(arr[i], values);
-    //         }
-    //         else {
-    //             potentialValue.set(arr[i], potentialValue.get(arr[i]).concat(values));
-    //         }
-    //     }
+    //also do grids
 
-    // }
-
-    // for (let j = 0; j < 9; j++) {
-    //     const arr: string[] = [];
-    //     let hashmap: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-    //     for (let i = 0; i < 9; i++) {
-    //         const rowEle = document.getElementById(`${i}${j}`);
-    //         if ((<HTMLInputElement>rowEle).value === '') {
-    //             arr.push(`${i}${j}`);
-    //         }
-    //         else {
-    //             hashmap.set(Number((<HTMLInputElement>rowEle).value), 0)
-    //         }
-    //     }
-    //     const values: number[] = [];
-    //     for (let i = 1; i < 10; i++) {
-    //         if (hashmap.get(i) === 1) {
-    //             values.push(i);
-    //         }
-    //     }
-
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (potentialValue.get(arr[i]) === undefined) {
-    //             potentialValue.set(arr[i], values);
-    //         }
-    //         else {
-    //             potentialValue.set(arr[i], Array.from(new Set(potentialValue.get(arr[i]).concat(values))));
-    //         }
-    //     }
-    // }
+    potentialValue  = new Map([...potentialValue.entries()].sort());
 }
 
