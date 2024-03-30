@@ -19,92 +19,71 @@ function populateBoard() {
     return true;
 }
 function gridIndex(i, j) {
-    return ((Math.floor(i / 3)) * 3) + (Math.floor(j / 3));
+    return ((Math.floor(i / 3)) * 3) + (Math.floor(j / 3)) + 1;
 }
+let mapGrid;
+let mapRow;
+let mapCol;
 function validateBoard() {
     if (board.length != 9 && board[0].length != 9) {
         return false;
     }
-    const mapGrid = new Map(Array.from({ length: 9 }, (_, i) => [i, new Map()]));
+    mapGrid = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, new Map(Array.from({ length: 9 }, (_, j) => [j + 1, 0]))]));
+    mapRow = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, new Map(Array.from({ length: 9 }, (_, j) => [j + 1, 0]))]));
+    mapCol = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, new Map(Array.from({ length: 9 }, (_, j) => [j + 1, 0]))]));
     for (let i = 0; i < 9; i++) {
-        const mapRow = new Map();
-        const mapCol = new Map();
+        const singleMapRow = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 0]));
+        const singleMapCol = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 0]));
         for (let j = 0; j < 9; j++) {
             const rowVal = board[i][j];
             const colVal = board[j][i];
-            if (mapRow.has(rowVal) || mapCol.has(colVal) || mapGrid.get(gridIndex(i, j)).has(rowVal)) {
+            if (singleMapRow.get(rowVal) == 1 || singleMapCol.get(colVal) == 1 || mapGrid.get(gridIndex(i, j)).get(rowVal) == 1) {
+                console.log(`${i}, ${j}`);
                 return false;
             }
             else {
                 if (rowVal != -1) {
-                    mapRow.set(rowVal, 1);
+                    singleMapRow.set(rowVal, 1);
                     mapGrid.get(gridIndex(i, j)).set(rowVal, 1);
                 }
                 if (colVal != -1) {
-                    mapCol.set(colVal, 1);
+                    singleMapCol.set(colVal, 1);
                 }
             }
         }
+        mapRow.set(i, singleMapRow);
+        mapCol.set(i, singleMapCol);
     }
     return true;
 }
 function solve() {
-    return populateBoard() && validateBoard();
+    const boardValid = populateBoard() && validateBoard();
+    if (boardValid) {
+        findVals();
+    }
+    return boardValid;
 }
-let potentialValue = new Map();
-function findPotentialValues() {
-    const mapComplement = function (foundVals) {
-        return Array.from({ length: 9 }, (_, i) => i).filter(i => (foundVals.get(i) === 1));
-    };
-    function innerJoinSet(arr1, arr2) {
-        const inBoth = [];
-        for (let i = 0; i < arr1.length; i++) {
-            if (arr2.includes(arr1[i]) && !(inBoth.includes(arr1[i]))) {
-                inBoth.push(arr1[i]);
+let potentialValues = new Map();
+function findVals() {
+    function logAndMapValues(row, col, grid) {
+        const sharedVals = [];
+        for (let i = 1; i <= 9; i++) {
+            if (row.get(i) == 0 && col.get(i) == 0 && grid.get(i) == 0) {
+                sharedVals.push(i);
             }
         }
-        return inBoth;
-    }
-    if (board.length != 9 && board[0].length != 9) {
-        return false;
+        return sharedVals;
     }
     for (let i = 0; i < 9; i++) {
-        const rowPossibilities = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-        const rowUnknowns = [];
-        const colPossibilities = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-        const colUnknowns = [];
         for (let j = 0; j < 9; j++) {
-            if (board[i][j] == -1) {
-                rowUnknowns.push([i, j]);
-            }
-            else {
-                rowPossibilities.set(board[i][j], 0);
-            }
-            if (board[j][i] == -1) {
-                colUnknowns.push([j, i]);
-            }
-            else {
-                colPossibilities.set(board[j][i], 0);
-            }
-        }
-        for (let i = 0; i < rowUnknowns.length; i++) {
-            if (potentialValue.get(JSON.stringify(rowUnknowns[i])) === undefined) {
-                potentialValue.set(JSON.stringify(rowUnknowns[i]), mapComplement(rowPossibilities));
-            }
-            else {
-                potentialValue.set(JSON.stringify(rowUnknowns[i]), innerJoinSet(potentialValue.get(JSON.stringify(rowUnknowns[i])), mapComplement(rowPossibilities)));
-            }
-        }
-        for (let i = 0; i < colUnknowns.length; i++) {
-            if (potentialValue.get(JSON.stringify(colUnknowns[i])) === undefined) {
-                potentialValue.set(JSON.stringify(colUnknowns[i]), mapComplement(colPossibilities));
-            }
-            else {
-                potentialValue.set(JSON.stringify(colUnknowns[i]), innerJoinSet(potentialValue.get(JSON.stringify(colUnknowns[i])), mapComplement(colPossibilities)));
+            if (board[i][j] === -1) {
+                const row = mapRow.get(i);
+                const col = mapCol.get(j);
+                const grid = mapGrid.get(gridIndex(i, j));
+                potentialValues.set(JSON.stringify([i, j]), logAndMapValues(row, col, grid));
             }
         }
     }
-    //also do grids
-    potentialValue = new Map([...potentialValue.entries()].sort());
+    return;
 }
 //# sourceMappingURL=main.js.map

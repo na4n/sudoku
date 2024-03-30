@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/x-icon" href="resources/favicon.jpg">
 		<title>Sudoku Solver</title>
 		<script type="text/javascript" src="build/main.js?v=1"></script>
 		<link href="src/css/style.css" rel="stylesheet">
@@ -8,7 +10,7 @@
 
 	<body>
 		<!-- <h1>Sudoku Solver</h1> -->
-		<table>
+		<table style="margin-left:auto;margin-right:auto;">
 			<tr>
 				<td><input type="text" class="numInput" id="00" size="1" maxlength="1"/></td>
 				<td><input type="text" class="numInput" id="01" size="1" maxlength="1"/></td>
@@ -110,7 +112,7 @@
 			</tr>
 		</table>
 		<br>
-		<button onclick="console.log(solve());">Validate Board</button> <!--margin-left8.3em-->
+		<button onclick="console.log(solve());console.log(potentialValue)" style="">Validate Board</button> <!--margin-left8.3em-->
 
 
 	</body>

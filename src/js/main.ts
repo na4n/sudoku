@@ -23,108 +23,80 @@ function populateBoard(): boolean{
 }
 
 function gridIndex(i: number, j: number): number{
-    return ((Math.floor(i/3))*3)+(Math.floor(j/3));
+    return ((Math.floor(i/3))*3)+(Math.floor(j/3))+1;
 }
 
+let mapGrid: Map<number, Map<number, number>>;
+let mapRow: Map<number, Map<number, number>>;
+let mapCol: Map<number, Map<number, number>>;
 function validateBoard(): boolean {
     if(board.length != 9 && board[0].length != 9){
         return false;
     }
+    mapGrid = new Map(Array.from({length: 9}, (_, i) => [i + 1, new Map(Array.from({length: 9}, (_, j) => [j + 1, 0]))]));
+    mapRow = new Map(Array.from({length: 9}, (_, i) => [i + 1, new Map(Array.from({length: 9}, (_, j) => [j + 1, 0]))]));
+    mapCol = new Map(Array.from({length: 9}, (_, i) => [i + 1, new Map(Array.from({length: 9}, (_, j) => [j + 1, 0]))]));
 
-    const mapGrid: Map<number,Map<number, number>> = new Map(Array.from({length:9}, (_,i) => [i, new Map()]));
     for(let i = 0; i < 9; i++){
-        const mapRow: Map<number, number> = new Map();
-        const mapCol: Map<number, number> = new Map();
+        const singleMapRow: Map<number, number> = new Map(Array.from({length: 9}, (_, i) => [i + 1, 0]));
+        const singleMapCol: Map<number, number> = new Map(Array.from({length: 9}, (_, i) => [i + 1, 0]));
         for(let j = 0; j < 9; j++){
             const rowVal: number = board[i][j];
             const colVal: number = board[j][i];
-            if(mapRow.has(rowVal) || mapCol.has(colVal) || mapGrid.get(gridIndex(i, j)).has(rowVal)){
+            if(singleMapRow.get(rowVal) == 1 || singleMapCol.get(colVal) == 1 || mapGrid.get(gridIndex(i, j)).get(rowVal) == 1){
+                console.log(`${i}, ${j}`);
                 return false;
             }
             else{
                 if(rowVal != -1){
-                    mapRow.set(rowVal, 1);
+                    singleMapRow.set(rowVal, 1);
                     mapGrid.get(gridIndex(i, j)).set(rowVal, 1);
                 }
                 if(colVal != -1){
-                    mapCol.set(colVal, 1);
+                    singleMapCol.set(colVal, 1);
                 }
             }
         }
+        mapRow.set(i, singleMapRow);
+        mapCol.set(i, singleMapCol);
     }
 
     return true;
 }
 
 function solve(): boolean{
-    return populateBoard() && validateBoard();
+    const boardValid = populateBoard() && validateBoard();
+    if(boardValid){
+        findVals();
+    }
+
+    return boardValid;
 }
 
-let potentialValue: Map<string, number[]> = new Map();
-function findPotentialValues(): boolean {
+let potentialValues: Map<string, number[]> = new Map();
+function findVals(){
+    function logAndMapValues(row: Map<number, number>, col: Map<number, number>, grid: Map<number, number>){
+        const sharedVals = [];
+        for(let i = 1; i <= 9; i++){
+            if(row.get(i) == 0 && col.get(i) == 0 && grid.get(i) == 0){
+                sharedVals.push(i);
+            }
+        }
+        return sharedVals;
+    }
     
-    const mapComplement = function (foundVals: Map<number, number>): number[]{
-        return Array.from({ length: 9 }, (_, i) => i).filter(i => (foundVals.get(i) === 1));
-    }
-
-    function innerJoinSet(arr1: number[], arr2: number[]): number[]{
-        const inBoth: number[] = [];
-        for(let i = 0; i < arr1.length; i++){
-            if(arr2.includes(arr1[i]) && !(inBoth.includes(arr1[i]))){
-                inBoth.push(arr1[i]);
-            }
-        }
-
-        return inBoth;
-    }
-
-    if(board.length != 9 && board[0].length != 9){
-        return false;
-    }
-
     for(let i = 0; i < 9; i++){
-        const rowPossibilities: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-        const rowUnknowns: number[][] = [];
-        const colPossibilities: Map<number, number> = new Map(Array.from({ length: 9 }, (_, i) => [i + 1, 1]));
-        const colUnknowns: number[][] = [];
-
         for(let j = 0; j < 9; j++){
-            if(board[i][j] == -1){
-                rowUnknowns.push([i, j]);
-            }
-            else{
-                rowPossibilities.set(board[i][j], 0);
-            }
-
-            if(board[j][i] == -1){
-                colUnknowns.push([j, i]);
-            }
-            else{
-                colPossibilities.set(board[j][i], 0);
-            }
-        }
-        
-        for(let i = 0; i < rowUnknowns.length; i++){
-            if(potentialValue.get(JSON.stringify(rowUnknowns[i])) === undefined){
-                potentialValue.set(JSON.stringify(rowUnknowns[i]), mapComplement(rowPossibilities));
-            }
-            else{
-                potentialValue.set(JSON.stringify(rowUnknowns[i]), innerJoinSet(potentialValue.get(JSON.stringify(rowUnknowns[i])), mapComplement(rowPossibilities)));
-            }
-        }
-
-        for(let i = 0; i < colUnknowns.length; i++){
-            if(potentialValue.get(JSON.stringify(colUnknowns[i])) === undefined){
-                potentialValue.set(JSON.stringify(colUnknowns[i]), mapComplement(colPossibilities));
-            }
-            else{
-                potentialValue.set(JSON.stringify(colUnknowns[i]), innerJoinSet(potentialValue.get(JSON.stringify(colUnknowns[i])), mapComplement(colPossibilities)));
-            }
+            if(board[i][j] === -1){
+                const row = mapRow.get(i);
+                const col = mapCol.get(j);
+                const grid = mapGrid.get(gridIndex(i,j));
+                
+                potentialValues.set(JSON.stringify([i, j]), logAndMapValues(row, col, grid));
+            } 
         }
     }
 
-    //also do grids
-
-    potentialValue  = new Map([...potentialValue.entries()].sort());
+    return;
 }
 
