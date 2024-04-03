@@ -38,7 +38,6 @@ function validateBoard() {
             const rowVal = board[i][j];
             const colVal = board[j][i];
             if (singleMapRow.get(rowVal) == 1 || singleMapCol.get(colVal) == 1 || mapGrid.get(gridIndex(i, j)).get(rowVal) == 1) {
-                console.log(`${i}, ${j}`);
                 return false;
             }
             else {
