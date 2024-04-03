@@ -129,8 +129,6 @@ function checkMap(): boolean{
 
 function solveDeterministic() {
     while(checkMap()){
-        // populateBoard();
-        // validateBoard();
         findVals();
     }
 }

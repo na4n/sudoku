@@ -8,3 +8,4 @@ Written in Typescript
 - ~~call ^ recursively to solve only one possibility until no updates~~
 - implement backtracking algorithm for non-deterministically solvable values
 - check for edge cases where deterministic solutions and backtracking do not solve
+- include and automate test suite for different boards... very very hard to find test cases
