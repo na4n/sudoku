@@ -44,7 +44,6 @@ function validateBoard(): boolean {
             const rowVal: number = board[i][j];
             const colVal: number = board[j][i];
             if(singleMapRow.get(rowVal) == 1 || singleMapCol.get(colVal) == 1 || mapGrid.get(gridIndex(i, j)).get(rowVal) == 1){
-                console.log(`${i}, ${j}`);
                 return false;
             }
             else{
@@ -84,7 +83,9 @@ function findVals(){
         }
         return sharedVals;
     }
-    
+   
+    potentialValues = new Map();
+
     for(let i = 0; i < 9; i++){
         for(let j = 0; j < 9; j++){
             if(board[i][j] === -1){
@@ -97,6 +98,43 @@ function findVals(){
         }
     }
 
+    potentialValues = new Map([...potentialValues.entries()].sort((a, b) => a[0].localeCompare(b[0])));
+
     return;
 }
 
+function checkMap(): boolean{
+    let change: boolean = false;
+    for(let i = 0; i < 9; i++){
+        for(let j = 0; j < 9; j++){
+            if(potentialValues.has(JSON.stringify([i, j])) && potentialValues.get(JSON.stringify([i, j])).length == 1){
+                change = true;
+                const value = potentialValues.get(JSON.stringify([i, j]))[0];
+                const div = <HTMLInputElement>(document.getElementById(`${i}${j}`));
+                
+                div.value = String(value);
+                board[i][j] = value;
+                
+                mapRow.get(i).set(value, 1);
+                mapCol.get(j).set(value, 1);
+                mapGrid.get(gridIndex(i, j)).set(value, 1);
+
+                div.style.color = 'red';
+            }
+        }
+    }
+
+    return change;
+}
+
+function solveDeterministic() {
+    while(checkMap()){
+        // populateBoard();
+        // validateBoard();
+        findVals();
+    }
+}
+
+function backtrack(){
+
+}
